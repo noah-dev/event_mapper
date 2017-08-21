@@ -1,45 +1,18 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <style>
-       #map {
-        height: 400px;
-        width: 100%;
-       }
-    </style>
-  </head>
-  <body>
-    <h3>My Google Maps Demo</h3>
+{% extends "map/base.html" %}
+{% block content %}
 
-    <div id="map"></div>
-    <script>
-        var map
-        function initMap() {
-            var kcmo = {lat: 39.1, lng: -94.6};
+<body>
+    <div class="row">
+        <div class="col-md-2">
+            Welcome! Click on a marker to see what is there
+        </div>
+        <div class="col-md-10">
+            <div id="map"></div>
+        </div>
+    </div>
 
-            map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 4,
-                center: kcmo
-            });
-        }
-
-        function newmarker(lat){
-            var test = {lat: lat, lng: -94.6};
-            var newmarker = new google.maps.Marker({
-                position: test,
-            });
-            var infowindow = new google.maps.InfoWindow({
-                content: "Test!"
-            })
-            newmarker.setMap(map);
-            newmarker.addListener('click', function(){
-                infowindow.open(map, newmarker)
-            });
-        }
-    </script>
-    
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChUDpznh7soiPbOZq1ZEep0R1cXSuOIZg&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChUDpznh7soiPbOZq1ZEep0R1cXSuOIZg">
     </script>
-  </body>
-</html>
+</body>
+{% endblock %}
