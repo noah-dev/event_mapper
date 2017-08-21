@@ -1,1 +1,1 @@
-web: gunicorn todo_dj.wsgi --log-file -
+web: gunicorn meetup_map.wsgi --log-file -
