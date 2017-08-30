@@ -19,7 +19,7 @@ app.controller('list', function($scope) {
     });
     load_data()
 
-    function add_marker(title, desc, lat, lng, set_marker){
+    function add_marker(title, desc, lat, lng){
         var marker = new google.maps.Marker({
             position: {lat: lat, lng: lng},
             title: title
@@ -31,8 +31,6 @@ app.controller('list', function($scope) {
         marker.addListener('click', function(){
             infowindow.open(map, marker)
         });
-        set_marker(marker)
-        markers.push(marker)
     };
 
     function load_data(){
@@ -49,23 +47,7 @@ app.controller('list', function($scope) {
                     $scope.meetups = meetups;
                 });
                 meetups.forEach(meetup =>{
-
-                    marker= new google.maps.Marker({
-                        position: {lat: meetup['lat'], lng: meetup['lng']},
-                        title: meetup['title']
-                    });
-                    marker.setMap(map);
-                    console.log(marker)
-                    var infowindow = new google.maps.InfoWindow({
-                        content: meetup['desc']
-                    })
-                    marker.addListener('click', function(){
-                        infowindow.open(map, marker)
-                    });
-                    console.log(marker)
-                    markers.push({'index':meetup['index'], 'map_marker':marker})
-                    
-                    
+                    add_marker(meetup['title'], meetup['desc'], meetup['lat'], meetup['lng'])
                 });
             }
         });
