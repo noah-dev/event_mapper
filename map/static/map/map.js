@@ -55,15 +55,14 @@ app.controller('list', function($scope) {
                         title: meetup['title']
                     });
                     marker.setMap(map);
-                    
-                    
+                    console.log(marker)
                     var infowindow = new google.maps.InfoWindow({
                         content: meetup['desc']
                     })
                     marker.addListener('click', function(){
                         infowindow.open(map, marker)
                     });
-
+                    console.log(marker)
                     markers.push({'index':meetup['index'], 'map_marker':marker})
                     
                     
