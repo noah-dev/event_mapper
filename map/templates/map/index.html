@@ -23,8 +23,7 @@
                     </div>
                     <div id="accordion" role="tablist" aria-multiselectable="true">
 
-                        <!--<div class="card" ng-repeat="meetup in (filtered_meetups = (meetups | filter:exact_words))">-->
-                        <div class="card" ng-repeat="meetup in meetups | filter:exact_words">
+                        <div class="card" ng-repeat="meetup in (filtered_meetups = (meetups | filter:exact_words))">
                             <div class="card-header" role="tab" id={{"h"+meetup.index}}>
                             <h5 class="mb-0">
                                 <a data-toggle="collapse" data-parent="#accordion" href={{"#c"+meetup.index}} aria-controls={{"c"+meetup.index}}>

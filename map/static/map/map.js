@@ -7,9 +7,13 @@ angular.module('map', ['ngSanitize']).controller('list', function($scope) {
     var zoom = 11
     var kcmo = {lat: 39.1, lng: -94.6};
     var meetups 
+    var markers = []
 
-
-    //$scope.$watch('filtered_meetups', _=>{console.log($scope.filtered_meetups)});
+    $scope.$watch('filtered_meetups', _=>{
+        $scope.filtered_meetups.forEach(meetup=>{
+            
+        })
+    });
     
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: zoom,
@@ -34,6 +38,7 @@ angular.module('map', ['ngSanitize']).controller('list', function($scope) {
     };
 
     function load_data(){
+        console.log("Hello")
         //Setup the ajax request and send it off - handled by urls.py
         $.ajax({
             url: 'meetups_data/',
@@ -48,12 +53,12 @@ angular.module('map', ['ngSanitize']).controller('list', function($scope) {
                 });
                 meetups.forEach(meetup =>{
 
-                    meetup['map_marker'] = new google.maps.Marker({
+                    marker= new google.maps.Marker({
                         position: {lat: meetup['lat'], lng: meetup['lng']},
                         title: meetup['title']
                     });
-                    //meetup['map_marker'].setMap(map);
-
+                    marker.setMap(map);
+                    markers.push({'index':meetup['index'], 'map_marker':marker})
                     /*
                     var infowindow = new google.maps.InfoWindow({
                         content: meetup['desc']
