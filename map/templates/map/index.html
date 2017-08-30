@@ -7,10 +7,8 @@
 
             {% verbatim %}
             <h2>Meetups in the Kansas City Area (15 Mile Radius)</h2>
-            
+
             <div ng-app="map" ng-controller="list">
-                <p ng-bind-html="myText"></p>
-            
                 <p>Type a letter in the input field:</p>
                 
                 <p><input type="text" ng-model="test"></p>
@@ -29,7 +27,7 @@
 
                         <div id={{"c"+meetup.index}} class="collapse" role="tabpanel" aria-labelledby={{"h"+meetup.index}}>
                             <div class="card-block">
-                                <p ng-bind-html="{{ meetup.desc }}"></p>
+                                <p>Hosted by: <b>{{ meetup.group }}</b> on <b>{{meetup.date}}</b></p>
                             </div>
                         </div>
                     </div>

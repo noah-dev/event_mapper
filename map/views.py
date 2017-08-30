@@ -9,7 +9,7 @@ def index(request):
 def meetups_data(request):
 
     key = os.environ.get("MEETUP_API_KEY")
-    print("https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=20.0&lon=-94.65&lat=39.1")
+    print("https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=100.0&lon=-94.65&lat=39.1")
     meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=10.0&lon=-94.6275&lat=39.1141"
     meetups = json.loads(requests.get(meetup_api_request).text)
 
@@ -23,6 +23,7 @@ def meetups_data(request):
             meetup_data['title'] = meetup['name']
             meetup_data['link'] = meetup['link']
 
+            meetup_data['group'] = meetup['group']['name']
             meetup_data['desc'] = "<b>"+meetup['group']['name']+": "+meetup_data['title']+"</b></br>" + \
                                         "<a href=\""+meetup_data['link']+"\">Meetup Page Link</a></br><hr>"
             if 'description' in meetup:
@@ -32,6 +33,10 @@ def meetups_data(request):
             
             meetup_data['lat'] = meetup['venue']['lat']
             meetup_data['lng'] = meetup['venue']['lon']
+
+            meetup_data['utc'] = int(meetup['time']/1000)
+            meetup_data['utc_offset'] = int(meetup['utc_offset']/1000)
+
             date_datetime = datetime.datetime.utcfromtimestamp(int((meetup['time'] + meetup['utc_offset'])/1000))
             meetup_data['date'] = date_datetime.strftime('%m/%d, %I:%M %p')
             meetups_data.append(meetup_data)

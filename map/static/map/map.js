@@ -1,6 +1,5 @@
 
 angular.module('map', ['ngSanitize']).controller('list', function($scope) {
-    $scope.myText = "My name is: <h1>John Doe</h1>";
 
     var map
     var zoom = 11
