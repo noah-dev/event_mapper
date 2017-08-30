@@ -3,7 +3,8 @@
 
 <body>
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
+            
             {% verbatim %}
             <h2>Meetups in the Kansas City Area (15 Mile Radius)</h2>
             <div ng-app="myApp" ng-controller="namesCtrl">
@@ -11,17 +12,32 @@
                 <p>Type a letter in the input field:</p>
                 
                 <p><input type="text" ng-model="test"></p>
-                
-                <ul>
-                    <li ng-repeat="x in names | filter:test">
-                    {{ x }}
-                    </li>
-                </ul>
+
+                <div id="accordion" role="tablist" aria-multiselectable="true">
+
+                    <div class="card" ng-repeat="x in names | filter:test">
+
+                        <div class="card-header" role="tab" id={{"h"+x.id}}>
+                        <h5 class="mb-0">
+                            <a data-toggle="collapse" data-parent="#accordion" href={{"#c"+x.id}} aria-controls={{"c"+x.id}}>
+                            Collapsible Group Item #{{x.id}}
+                            </a>
+                        </h5>
+                        </div>
+
+                        <div id={{"c"+x.id}} class="collapse" role="tabpanel" aria-labelledby={{"h"+x.id}}>
+                            <div class="card-block">
+                                {{ x.name }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endverbatim %}
+
             </div>
         </div>
 
-        <div class="col-md-10">
+        <div class="col-md-9">
             <div id="map"></div>
         </div>
     </div>
