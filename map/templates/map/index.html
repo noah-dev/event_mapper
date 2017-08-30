@@ -4,52 +4,21 @@
 <body>
     <div class="row">
         <div class="col-md-2">
+            {% verbatim %}
             <h2>Meetups in the Kansas City Area (15 Mile Radius)</h2>
-            <div id="accordion" role="tablist" aria-multiselectable="true">
-                <div class="card">
-                    <div class="card-header" role="tab" id="headingOne">
-                    <h5 class="mb-0">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Collapsible Group Item #1
-                        </a>
-                    </h5>
-                    </div>
+            <div ng-app="myApp" ng-controller="namesCtrl">
+                    
+                <p>Type a letter in the input field:</p>
                 
-                    <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
-                    <div class="card-block">
-                        
-                    </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header" role="tab" id="headingTwo">
-                    <h5 class="mb-0">
-                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        Collapsible Group Item #2
-                        </a>
-                    </h5>
-                    </div>
-                    <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
-                    <div class="card-block">
-
-                    </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header" role="tab" id="headingThree">
-                    <h5 class="mb-0">
-                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Collapsible Group Item #3
-                        </a>
-                    </h5>
-                    </div>
-                    <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
-                    <div class="card-block">
-                        
-                    </div>
-                    </div>
-                </div>
-                </div>
+                <p><input type="text" ng-model="test"></p>
+                
+                <ul>
+                    <li ng-repeat="x in names | filter:test">
+                    {{ x }}
+                    </li>
+                </ul>
+            {% endverbatim %}
+            </div>
         </div>
 
         <div class="col-md-10">

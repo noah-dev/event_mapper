@@ -2,8 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 import os, requests, json, datetime
 
+
 def index(request):
-    meetups_data = []
     return render(request, 'map/index.html')
 
 def meetups_data(request):
