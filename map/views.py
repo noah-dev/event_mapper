@@ -9,7 +9,7 @@ def index(request):
 def meetups_data(request):
 
     key = os.environ.get("MEETUP_API_KEY")
-    print("https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=20.0&lon=-94.6275&lat=39.1141")
+    print("https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=20.0&lon=-94.65&lat=39.1")
     meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=10.0&lon=-94.6275&lat=39.1141"
     meetups = json.loads(requests.get(meetup_api_request).text)
 
@@ -19,11 +19,12 @@ def meetups_data(request):
         if 'venue' in meetup:
             meetup_data = {}
 
+            meetup_data['index'] = len(meetups_data)
             meetup_data['title'] = meetup['name']
             meetup_data['link'] = meetup['link']
 
             meetup_data['desc'] = "<b>"+meetup['group']['name']+": "+meetup_data['title']+"</b></br>" + \
-                                        "<a href=\""+meetup_data['link']+"\">Meetup Page Link</a></br>"
+                                        "<a href=\""+meetup_data['link']+"\">Meetup Page Link</a></br><hr>"
             if 'description' in meetup:
                 meetup_data['desc']+= meetup['description']
             else:
