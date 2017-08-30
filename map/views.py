@@ -20,7 +20,15 @@ def meetups_data(request):
             meetup_data = {}
 
             meetup_data['title'] = meetup['name']
-            meetup_data['desc'] = meetup['link']
+            meetup_data['link'] = meetup['link']
+
+            meetup_data['desc'] = "<b>"+meetup['group']['name']+": "+meetup_data['title']+"</b></br>" + \
+                                        "<a href=\""+meetup_data['link']+"\">Meetup Page Link</a></br>"
+            if 'description' in meetup:
+                meetup_data['desc']+= meetup['description']
+            else:
+                meetup_data['desc']+= "<h1>No Description Found</h1>"
+            
             meetup_data['lat'] = meetup['venue']['lat']
             meetup_data['lng'] = meetup['venue']['lon']
             date_datetime = datetime.datetime.utcfromtimestamp(int((meetup['time'] + meetup['utc_offset'])/1000))

@@ -10,6 +10,7 @@ $(function() {
         center: kcmo
     });
     get_data()
+    populate_map()
 });
 
 function add_marker(title, desc, lat, lng){
@@ -38,17 +39,6 @@ function get_data(){
     });
 }
 
-$( "#load_5" ).click(function() {
-    if (meetups.length != meetups_loaded){
-        for (i = meetups_loaded; i < meetups_loaded+5; i++) {
-            meetup = meetups[i]
-            add_marker(meetup['title'], meetup['desc'] + " | " + meetup['date'], meetup['lat'], meetup['lng'])
-        } 
-        meetups_loaded += 5
-    }
-});
-
-/*
 function populate_map(){
 
     //Setup the ajax request and send it off - handled by urls.py
@@ -59,15 +49,18 @@ function populate_map(){
         dataType: 'json',
         success: function (data) {
             meetups = data
-            var offset = 100; 
+            var offset = 50; 
             meetups.forEach(meetup =>{
-                setTimeout(_=>{add_marker(meetup['title'], meetup['desc'] + " | " + meetup['date'], meetup['lat'], meetup['lng']);}, offset);
-                offset += 100;
-
-                // $("#meetup").append("<p>" + meetup['desc'] + " | " + meetup['date'] + "</p>")
+                setTimeout(_=>{add_marker(meetup['title'], meetup['desc'], meetup['lat'], meetup['lng']);}, offset);
+                offset += 50;
             });
             
         }
     });
+}
+
+/*
+function make_info_window(){
+    
 }
 */
