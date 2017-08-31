@@ -6,3 +6,5 @@ Originally planned for a 2 week build time, but opportunity arose that required 
 **Todo:**
 * Major refactoring of code. Cleaner code, cleaner architecture, & unit tests. 
 * Improve or replace date range widget. Need to be able to specific timer faster
+* Add feature to search area. Currently hard-coded to downtown KC. 
+* Add better comments and create docs outling project. [I have done something similair for an earlier project.](https://github.com/noah-dev/todo_django/blob/master/README.md)
