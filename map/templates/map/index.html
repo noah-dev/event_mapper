@@ -8,21 +8,33 @@
                 <h2>Meetups in the Kansas City Area</h2>
                 <div ng-app="map" ng-controller="list">
                     <div class="row">
-                        <div class="col-sm-4">   
+                        <div class="col-md-6">   
                             <p>Search for Exact Words</p>
-                            <p><input type="text" ng-model="exact_words"></p>
+                            <p><input type="text" class="form-control" ng-model="exact_words"></p>
                         </div>
 
-                        <div class="col-sm-2">   
-                            <p>From</p>
-                            <p><input type="text" ng-model="key_words"></p>
+                        <div class="col-md-3">   
+                            <p>From Date</p>
+                            <p><input type="text" class="form-control" ng-model="from_date"></p>
                         </div> 
-                        <div class="col-sm-2">   
-                            <p>To</p>
-                            <p><input type="text" ng-model="date"></p>
+                        <div class="col-md-3">   
+                            <p>To Date</p>
+                            <p><input type="text" class="form-control" ng-model="to_date"></p>
                         </div>  
                     </div>
-                    <a href="/rebuild" class = "btn btn-lg btn-primary">Populate Map and List Based On Time</a><br><br>
+                    <div class="row">
+                        <div class="col-md-6">   
+                            <p>From Time</p>
+                            <p><input type="text" class="form-control" ng-model="from_time"></p>
+                        </div> 
+                        <div class="col-md-6">   
+                            <p>To Time</p>
+                            <p><input type="text" class="form-control" ng-model="to_time"></p>
+                        </div>  
+                    </div>
+                    <div class = "text-center">
+                        <a href="/populate" class = "btn btn-lg btn-primary">Populate Map and List Based On Time Range</a><br><br>
+                    </div>
                     <div id="accordion" role="tablist" aria-multiselectable="true">
 
                         <div class="card" ng-repeat="meetup in (filtered_meetups = (meetups | filter:exact_words))">
