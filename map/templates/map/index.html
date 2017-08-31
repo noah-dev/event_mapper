@@ -1,39 +1,31 @@
 {% extends "map/base.html" %}
 {% block content %}
+
 <body>
     <div class="jumbotron">
         <div class="row">
             <div class="col-md-5">
                 {% verbatim %}
-                <h2>Meetups in the Kansas City Area</h2>
                 <div ng-app="map" ng-controller="list">
-                    <div class="row">
-                        <div class="col-md-6">   
-                            <p>Search for Exact Words</p>
-                            <p><input type="text" class="form-control" ng-model="exact_words"></p>
-                        </div>
+                    <div class="col-md-12">   
+                        <h3>Search for Exact Words</h3>
+                        <p><input type="text" class="form-control" ng-model="exact_words"></p>
+                    </div>
 
-                        <div class="col-md-3">   
-                            <p>From Date</p>
-                            <p><input type="text" class="form-control" ng-model="from_date"></p>
-                        </div> 
-                        <div class="col-md-3">   
-                            <p>To Date</p>
-                            <p><input type="text" class="form-control" ng-model="to_date"></p>
-                        </div>  
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">   
-                            <p>From Time</p>
-                            <p><input type="text" class="form-control" ng-model="from_time"></p>
-                        </div> 
-                        <div class="col-md-6">   
-                            <p>To Time</p>
-                            <p><input type="text" class="form-control" ng-model="to_time"></p>
-                        </div>  
-                    </div>
+                    <datetime-range
+                        start="start"
+                        end="end"
+                        presets="presets"
+                        on-change="changed()"
+                        on-change-start="changedStart()"
+                        on-change-end="changedEnd()"
+                        on-close="closed()">
+                    </datetime-range>
+
+                    <br><br>
+                    
                     <div class = "text-center">
-                        <a href="/populate" class = "btn btn-lg btn-primary">Populate Map and List Based On Time Range</a><br><br>
+                        <button ng-click="populate_map()" type="button" class="btn btn-lg btn-info">Populate Map and List Based On Time Range</button><br><br>
                     </div>
                     <div id="accordion" role="tablist" aria-multiselectable="true">
 

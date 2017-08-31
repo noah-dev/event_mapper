@@ -1,6 +1,21 @@
-app = angular.module('map', ["ngSanitize"])
+app = angular.module('map', ["ngSanitize",'g1b.datetime-range'])
 
 app.controller('list', function($scope) {
+
+    // Setup the angular-datetime-range element
+    $scope.start = moment();
+    $scope.end = moment().add(1, 'days').add(0, 'hours');
+    var to 
+    var from
+    
+    $scope.changedStart = function () {
+        to_unix = moment($scope.start['d']).format("X");
+    };
+    $scope.changedEnd = function () {
+        from_unix = moment($scope.end['d']).format("X");
+    };
+
+
     var map
     var zoom = 11
     var kcmo = {lat: 39.1, lng: -94.6};
@@ -12,7 +27,11 @@ app.controller('list', function($scope) {
         center: kcmo
     });
 
-    function populate_map(){
+    $scope.populate_map = function(){
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers = []
         load_data()
     }
 
