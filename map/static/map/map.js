@@ -1,11 +1,5 @@
-app = angular.module('map', ['ngSanitize'])
+app = angular.module('map', ["ngSanitize"])
 
-app.filter('htmlToPlaintext', function() {
-    return function(text) {
-      return  text ? String(text).replace(/<[^>]+>/gm, '') : '';
-    };
-  }
-);
 app.controller('list', function($scope) {
     var map
     var zoom = 11
@@ -17,7 +11,10 @@ app.controller('list', function($scope) {
         zoom: zoom,
         center: kcmo
     });
-    load_data()
+
+    function populate_map(){
+        load_data()
+    }
 
     function add_marker(title, desc, lat, lng){
         var marker = new google.maps.Marker({
