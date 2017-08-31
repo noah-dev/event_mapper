@@ -11,11 +11,9 @@ app.controller('list', function($scope) {
     var from_unix = moment($scope.end['_d']).unix();
     $scope.changedStart = function () {
         to_unix = moment($scope.start['_d']).unix();
-        console.log($scope.start['_d'], to_unix)
     };
     $scope.changedEnd = function () {
         from_unix = moment($scope.end['_d']).unix();
-        console.log($scope.start['_d'], from_unix)
     };
 
 
@@ -31,25 +29,35 @@ app.controller('list', function($scope) {
     });
     var infowindow = new google.maps.InfoWindow({})
 
-    $scope.$watch('filtered_meetups', function(display_meetups) {
-        console.log($scope.filtered_meetups)
-        console.log(markers)
+    
+    $scope.$watch('visible_meetups', function() {
+        show_filtered_meetups();
+    });
+    function show_filtered_meetups(){
 
         for (var i = 0; i < markers.length; i++) {
             markers[i]['marker'].setMap(null);
         }
-        for (var i = 0; i < $scope.filtered_meetups.length; i++) {
-            markers[$scope.filtered_meetups[i]['index']]['marker'].setMap(map);
+        for (var i = 0; i < $scope.visible_meetups.length; i++) {
+            markers[$scope.visible_meetups[i]['index']]['marker'].setMap(map);
         }
-    });
+    }
     
-    $scope.populate_map = function(){
+
+    $scope.populate = function(){
+        populate_map_and_list()
+    }
+
+    function populate_map_and_list(){
         for (var i = 0; i < markers.length; i++) {
             markers[i]['marker'].setMap(null);
         }
-        markers = []
-        load_data(to_unix, from_unix)
+        markers = [];
+        load_data(to_unix, from_unix);
     }
+    
+    //Load upon page - defaults to next 24 hours
+    populate_map_and_list()
 
     function add_marker(index, title, desc, lat, lng){
         var marker = new google.maps.Marker({
@@ -78,15 +86,16 @@ app.controller('list', function($scope) {
             success: function (data) {
                 meetups = data
 
-                $scope.$apply(_=> {
+                $scope.$apply( _=> {
                     $scope.meetups = meetups;
-                });
-                meetups.forEach(meetup =>{
-                    add_marker(meetup['index'], meetup['title'], meetup['desc'], meetup['lat'], meetup['lng'])
+
+                    for (var i = 0; i < meetups.length; i++) {
+                        meetup = meetups[i]
+                        add_marker(meetup['index'], meetup['title'], meetup['desc'], meetup['lat'], meetup['lng'])
+                    }
+                    show_filtered_meetups();
                 });
             }
         });
     }
-
-
 });

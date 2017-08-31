@@ -8,28 +8,26 @@
                 {% verbatim %}
                 <div ng-app="map" ng-controller="list">
                     <div class="col-md-12">   
-                        <h3>Search for Exact Words</h3>
-                        <p><input type="text" class="form-control" ng-model="exact_words"></p>
+                        <h3>Search for Exact Phrase</h3>
+                        <p><input type="text" class="form-control" ng-model="exact_phrase"></p>
                     </div>
 
+                    
                     <datetime-range
                         start="start"
                         end="end"
-                        presets="presets"
-                        on-change="changed()"
                         on-change-start="changedStart()"
-                        on-change-end="changedEnd()"
-                        on-close="closed()">
+                        on-change-end="changedEnd()">
                     </datetime-range>
 
-                    <br><br>
+                    <br>
                     
                     <div class = "text-center">
-                        <button ng-click="populate_map()" type="button" class="btn btn-lg btn-info">Populate Map and List Based On Time Range</button><br><br>
+                        <button ng-click="populate()" type="button" class="btn btn-lg btn-info">Filter Time</button><br><br>
                     </div>
                     <div id="accordion" role="tablist" aria-multiselectable="true">
 
-                        <div class="card" ng-repeat="meetup in (filtered_meetups = (meetups | filter:exact_words))">
+                        <div class="card" ng-repeat="meetup in meetups | filter:exact_phrase as visible_meetups">
                             <div class="card-header" role="tab" id={{"h"+meetup.index}}>
                             <h5 class="mb-0">
                                 <a data-toggle="collapse" data-parent="#accordion" href={{"#c"+meetup.index}} aria-controls={{"c"+meetup.index}}>
