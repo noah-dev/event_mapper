@@ -52,3 +52,6 @@ def meetups_data(request):
             pass
     
     return JsonResponse(meetups_data, safe=False)
+
+def privacy(request):
+    return render(request, 'map/privacy.html')
