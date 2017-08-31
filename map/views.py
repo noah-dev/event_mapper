@@ -42,13 +42,13 @@ def meetups_data(request):
             else:
                 meetup_data['desc']+= "<h1>No Description Found</h1>"
             meetup_data['desc_no_html'] = strip_tags(meetup_data['desc'])
-            
-            meetups_data.append(meetup_data)
+
+            if datetime.datetime.utcfromtimestamp(int(request.GET['to_time'])) <= \
+                datetime.datetime.utcfromtimestamp(meetup_data['utc']) <= \
+                datetime.datetime.utcfromtimestamp(int(request.GET['from_time'])):
+                
+                meetups_data.append(meetup_data)
         else:
             pass
     
     return JsonResponse(meetups_data, safe=False)
-
-
-def rebuild(request):
-    pass
