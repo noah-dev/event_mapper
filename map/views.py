@@ -12,7 +12,6 @@ def privacy(request):
 
 def meetups_data(request):
     key = os.environ.get("MEETUP_API_KEY")
-    print("https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=15&lon=-94.65&lat=39.1")
     meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=10.0&lon=-94.6275&lat=39.1141"
     meetups = json.loads(requests.get(meetup_api_request).text)
 
@@ -70,7 +69,6 @@ def partial(request):
 
 def concept_meetups_data(request):
     key = os.environ.get("MEETUP_API_KEY")
-    print("https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=20.0&lon=-94.6275&lat=39.1141")
     meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=10.0&lon=-94.6275&lat=39.1141"
     meetups = json.loads(requests.get(meetup_api_request).text)
 
@@ -94,7 +92,6 @@ def concept_meetups_data(request):
 
 def partial_meetups_data(request):
     key = os.environ.get("MEETUP_API_KEY")
-    print("https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=15&lon=-94.65&lat=39.1")
     meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=10.0&lon=-94.6275&lat=39.1141"
     meetups = json.loads(requests.get(meetup_api_request).text)
 
