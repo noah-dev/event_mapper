@@ -1,4 +1,4 @@
-# meetup_map
+# event_mapper
 This app was built over the course of three major sprints, total to around ~18 hours. (Estimate subject to change)
 
 Originally planned for a 2 week build time, but opportunity arose that required immediate execution. The app is functional and working. Moving forward, refactoring and dealing with technical debt will be important. 
