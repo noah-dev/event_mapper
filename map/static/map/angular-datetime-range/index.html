@@ -21,6 +21,7 @@
     start="start"
     end="end"
     presets="presets"
+	on-open="opened()"
     on-change="changed()"
     on-change-start="changedStart()"
     on-change-end="changedEnd()"
@@ -36,6 +37,10 @@
       controller('MainCtrl', function ($scope) {
         $scope.start = moment();
         $scope.end = moment().add(1, 'days').add(1, 'hours');
+		
+		$scope.opened = function () {
+          console.log('opened');
+        };
 
         $scope.changed = function () {
           console.log('changed start or end datetime objects');
