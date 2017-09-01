@@ -5,6 +5,7 @@ Originally planned for a 2 week build time, but opportunity arose that required 
 
 **Todo:**
 * Major refactoring of code. Cleaner code, cleaner architecture, & unit tests. 
+* Optimize for mobile devices. 
 * Add animation to show key interactions and improve user experience.
 * Improve or replace date range widget. Need to be able to specific timer faster. Would also be nice if it updated time initially, to clearly show it is a time picker to user.
 * Add feature to search area. Currently hard-coded to downtown KC. 
