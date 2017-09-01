@@ -38,7 +38,7 @@ def meetups_data(request):
             meetup_data['group'] = meetup['group']['name']
             meetup_data['desc'] = "<b>"+meetup['group']['name']+": "+meetup_data['title']+"</b></br>" + \
                                     "Held at: <b>"+meetup_data['date']+"</b></br>" +\
-                                        "<a href=\""+meetup_data['link']+"\">Meetup Page Link</a></br><hr>"
+                                        "<a href=\""+meetup_data['link']+"\" target=\"_blank\">Meetup Page Link</a></br><hr>"
             if 'description' in meetup:
                 meetup_data['desc']+= meetup['description']
             else:

@@ -1,1 +1,1 @@
-web: gunicorn meetup_map.wsgi --log-file -
+web: gunicorn event_mapper.wsgi --log-file -
