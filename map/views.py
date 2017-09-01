@@ -10,12 +10,6 @@ def index(request):
 def privacy(request):
     return render(request, 'map/privacy.html')
 
-def concept(request):
-    return render(request, 'concept/index.html')
-
-def partial(request):
-    return render(request, 'partial/index.html')
-
 def meetups_data(request):
     key = os.environ.get("MEETUP_API_KEY")
     print("https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=15&lon=-94.65&lat=39.1")
@@ -63,7 +57,42 @@ def meetups_data(request):
     
     return JsonResponse(meetups_data, safe=False)
 
+# -------------------------------------
+# Previous Versions
+# ------------------------------------
+
+def concept(request):
+    return render(request, 'concept/index.html')
+
+def partial(request):
+    return render(request, 'partial/index.html')
+
+
 def concept_meetups_data(request):
+    key = os.environ.get("MEETUP_API_KEY")
+    print("https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=20.0&lon=-94.6275&lat=39.1141")
+    meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=10.0&lon=-94.6275&lat=39.1141"
+    meetups = json.loads(requests.get(meetup_api_request).text)
+
+    meetups_data = []
+
+    for meetup in meetups:
+        if 'venue' in meetup:
+            meetup_data = {}
+
+            meetup_data['title'] = meetup['name']
+            meetup_data['desc'] = meetup['link']
+            meetup_data['lat'] = meetup['venue']['lat']
+            meetup_data['lng'] = meetup['venue']['lon']
+            date_datetime = datetime.datetime.utcfromtimestamp(int((meetup['time'] + meetup['utc_offset'])/1000))
+            meetup_data['date'] = date_datetime.strftime('%m/%d, %I:%M %p')
+            meetups_data.append(meetup_data)
+        else:
+            pass
+    
+    return JsonResponse(meetups_data, safe=False)
+
+def partial_meetups_data(request):
     key = os.environ.get("MEETUP_API_KEY")
     print("https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=15&lon=-94.65&lat=39.1")
     meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=10.0&lon=-94.6275&lat=39.1141"
@@ -98,12 +127,8 @@ def concept_meetups_data(request):
             else:
                 meetup_data['desc']+= "<h1>No Description Found</h1>"
             meetup_data['desc_no_html'] = strip_tags(meetup_data['desc'])
-
-            if datetime.datetime.utcfromtimestamp(int(request.GET['to_time'])) <= \
-                datetime.datetime.utcfromtimestamp(meetup_data['utc']) <= \
-                datetime.datetime.utcfromtimestamp(int(request.GET['from_time'])):
-                
-                meetups_data.append(meetup_data)
+            
+            meetups_data.append(meetup_data)
         else:
             pass
     
