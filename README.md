@@ -9,4 +9,5 @@ Originally planned for a 2 week build time, but opportunity arose that required 
 * Add animation to show key interactions and improve user experience.
 * Improve or replace date range widget. Need to be able to specific timer faster. Would also be nice if it updated time initially, to clearly show it is a time picker to user.
 * Add feature to search area. Currently hard-coded to downtown KC. 
+* Switch from API key to OAuth
 * Add better comments and create docs outlining project. [I have done something similar for an earlier project.](https://github.com/noah-dev/todo_django/blob/master/README.md)
