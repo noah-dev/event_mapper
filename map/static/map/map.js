@@ -16,12 +16,29 @@ app.controller('list', function($scope) {
         from_unix = moment($scope.end['_d']).unix();
     };
 
+    //Updating the list
+    var markers = []
+    $scope.$watch('visible_meetups', function() {
+        show_filtered_meetups();
+    });
+    function show_filtered_meetups(){
+        if (markers.len = 0){
+            for (var i = 0; i < markers.length; i++) {
+                markers[i]['marker'].setMap(null);
+            }
+            for (var i = 0; i < $scope.visible_meetups.length; i++) {
+                markers[$scope.visible_meetups[i]['index']]['marker'].setMap(map);
+            }
+        }
+    }
+    
 
+    //Load Map upon page - defaults to next 24 hours
+    populate_map_and_list()
     var map
     var zoom = 11
     var kcmo = {lat: 39.1, lng: -94.6};
     var meetups 
-    var markers = []
     
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: zoom,
@@ -29,35 +46,19 @@ app.controller('list', function($scope) {
     });
     var infowindow = new google.maps.InfoWindow({})
 
-    
-    $scope.$watch('visible_meetups', function() {
-        show_filtered_meetups();
-    });
-    function show_filtered_meetups(){
-
-        for (var i = 0; i < markers.length; i++) {
-            markers[i]['marker'].setMap(null);
-        }
-        for (var i = 0; i < $scope.visible_meetups.length; i++) {
-            markers[$scope.visible_meetups[i]['index']]['marker'].setMap(map);
-        }
-    }
-    
-
     $scope.populate = function(){
         populate_map_and_list()
     }
 
     function populate_map_and_list(){
-        for (var i = 0; i < markers.length; i++) {
-            markers[i]['marker'].setMap(null);
+        if (markers.len = 0){
+            for (var i = 0; i < markers.length; i++) {
+                markers[i]['marker'].setMap(null);
+            }
         }
         markers = [];
         load_data(to_unix, from_unix);
     }
-    
-    //Load upon page - defaults to next 24 hours
-    populate_map_and_list()
 
     function add_marker(index, title, desc, lat, lng){
         var marker = new google.maps.Marker({
@@ -98,4 +99,5 @@ app.controller('list', function($scope) {
             }
         });
     }
+    
 });
