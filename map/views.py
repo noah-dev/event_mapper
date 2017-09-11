@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
+from django.utils import timezone
 from django.utils.html import strip_tags
 import os, requests, json, datetime
 
@@ -11,12 +12,14 @@ def privacy(request):
     return render(request, 'map/privacy.html')
 
 def meetups_data(request):
+    print(timezone.now())
     key = os.environ.get("MEETUP_API_KEY")
     meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=10.0&lon=-94.6275&lat=39.1141"
+    print(meetup_api_request)
     meetups = json.loads(requests.get(meetup_api_request).text)
-
+    print(timezone.now())
+    
     meetups_data = []
-
     for meetup in meetups:
         if 'venue' in meetup:
             meetup_data = {}
@@ -54,6 +57,7 @@ def meetups_data(request):
         else:
             pass
     
+    print(timezone.now())
     return JsonResponse(meetups_data, safe=False)
 
 # -------------------------------------
