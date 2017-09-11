@@ -29,18 +29,18 @@
                     </div>
                     <div id="accordion" role="tablist" aria-multiselectable="true">
 
-                        <div class="card" ng-repeat="meetup in meetups | filter:exact_phrase as visible_meetups">
-                            <div class="card-header" role="tab" id={{"h"+meetup.index}}>
+                        <div class="card" ng-repeat="event in events | filter:exact_phrase as visible_events">
+                            <div class="card-header" role="tab" id={{"h"+event.index}}>
                             <h5 class="mb-0">
-                                <a data-toggle="collapse" data-parent="#accordion" href={{"#c"+meetup.index}} aria-controls={{"c"+meetup.index}}>
-                                {{meetup.title}}
+                                <a data-toggle="collapse" data-parent="#accordion" href={{"#c"+event.index}} aria-controls={{"c"+event.index}}>
+                                {{event.title}}
                                 </a>
                             </h5>
                             </div>
 
-                            <div id={{"c"+meetup.index}} class="collapse" role="tabpanel" aria-labelledby={{"h"+meetup.index}}>
+                            <div id={{"c"+event.index}} class="collapse" role="tabpanel" aria-labelledby={{"h"+event.index}}>
                                 <div class="card-block">
-                                    <p ng-bind-html="meetup.desc"></p>
+                                    <p ng-bind-html="event.desc"></p>
                                 </div>
                             </div>
                         </div>
