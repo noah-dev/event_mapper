@@ -63,7 +63,6 @@ app.controller('list', function($scope, $http) {
     }
 
     function populate_map_and_list(markers, infowindow, map, to, from){
-        reset_map(markers);
         data_req = $http({
             url: DATA_URL,
             method: "GET",
@@ -73,6 +72,7 @@ app.controller('list', function($scope, $http) {
             }
         });
         data_req.then(data=>{
+            reset_map(markers);
             var events = data.data
             $scope.events = events;
             
