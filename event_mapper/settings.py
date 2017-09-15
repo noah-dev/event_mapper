@@ -33,7 +33,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 if not SECRET_KEY and DEBUG:
     SECRET_KEY = 'wsk74@fq9xio&2f6uhi%yu$p)hc$4or$odz&evf)gmsqu!@2rh'
 
-ALLOWED_HOSTS = ['eventsonmap.herokuapp.com','localhost']
+ALLOWED_HOSTS = ['eventsonmap.herokuapp.com','localhost','testserver']
 
 
 # Application definition

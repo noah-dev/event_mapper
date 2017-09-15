@@ -43,7 +43,6 @@ def meetups_data(request):
                 meetup_data['desc']+= meetup['description']
             else:
                 meetup_data['desc']+= "<h1>No Description Found</h1>"
-            meetup_data['desc_no_html'] = strip_tags(meetup_data['desc'])
 
             if datetime.datetime.utcfromtimestamp(int(request.GET['to_time'])) <= \
                 datetime.datetime.utcfromtimestamp(meetup_data['utc']) <= \
