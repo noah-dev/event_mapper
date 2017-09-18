@@ -19,4 +19,8 @@ def cat(text):
     features=[Features.Categories()]
   )
   # Return only Level 1 tags.
-  return response['categories'][0]['label'][1:].partition("/")[0]
+  try:
+    category = response['categories'][0]['label'][1:].partition("/")[0]
+  except:
+    category = ""
+  return  category
