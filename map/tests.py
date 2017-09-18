@@ -25,9 +25,15 @@ class TestData(TestCase):
 
         response = self.client.get(reverse('map:meetups_data'),{'to_time': to_time , 'from_time': from_time })
         data_json = json.loads(response.content)
-        data_keys = ['index', 'title', 'link', 'address', 'lat', 'lng', 'utc', 'utc_offset', 'date', 'group', 'desc']
+        data_keys = ['index', 'title', 'link', 'address', 'lat', 'lng', 'utc', 'utc_offset', 'date', 'group', 'desc', 'tags']
         
+        print("Testing if response is valid...")
         self.assertEqual(response.status_code, 200)
         self.assertIs(len(data_json)>0, True)
         self.assertIs(set(data_json[0].keys()) == set(data_keys), True)
+        print("Testing if time filtering worked...")
         self.assertIs(valid_time(to_time, from_time, data_json), True)
+        print("Testing if tags are formatted correctly...")
+        for entry in data_json:
+            self.assertIs("/" in entry['tags']['cat'], False)
+            self.assertIs(len(entry['tags']['cat'])>0, True)
