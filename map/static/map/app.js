@@ -21,6 +21,7 @@ app.controller('maplist', function($scope, $http) {
     var l_markers = [];
     var l_infowindow;
     var l_events = [];
+    var l_area = null;
 
     initMap();
     $scope.$watch('visible_events', function() {
@@ -36,7 +37,23 @@ app.controller('maplist', function($scope, $http) {
             center: {lat: 39.1, lng: -94.5},
         });
         l_infowindow = new google.maps.InfoWindow({});
+        drawArea(l_map)
         populate();
+    }
+    function drawArea(map){
+        l_area = new google.maps.Circle({
+            strokeColor: '#00AAFF',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#00AAFF',
+            fillOpacity: 0.35,
+            map: map,
+            center: map.getCenter(),
+            radius: 8046.72
+        });
+        map.addListener('center_changed', function() {
+            l_area.setCenter(l_map.getCenter())
+        });
     }
     function populate(){
         data_req = $http({

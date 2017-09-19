@@ -18,7 +18,7 @@ def meetups_data(request):
     lat = request.GET['lat'][:10]
     lon = request.GET['lon'][:10]
     meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=5.0" + "&lon=" + lon + "&lat=" + lat
-    print(meetup_api_request)
+    # print(meetup_api_request)
     meetups = json.loads(requests.get(meetup_api_request).text)
     
     meetups_data = []
