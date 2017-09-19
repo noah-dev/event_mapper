@@ -13,11 +13,14 @@ def tag(title, desc_nohtml):
   tags['cat']=cat(title + "\n" + desc_nohtml)
   return tags;
 
+# Return NLU category tag
 def cat(text):
+  # Using the NLU python module, put the response together. For now, only get the category
   response = natural_language_understanding.analyze(
     text=text,
     features=[Features.Categories()]
   )
+  
   # Return only Level 1 tags.
   try:
     category = response['categories'][0]['label'][1:].partition("/")[0]

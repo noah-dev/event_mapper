@@ -9,12 +9,15 @@ from math import radians, cos, sin, asin, sqrt
 from . import tags
 
 def index(request):
+    '''Render the home page, with the map'''
     return render(request, 'map/index.html')
 
 def privacy(request):
+    '''Render the private page'''
     return render(request, 'map/privacy.html')
 
 def meetups_data(request):
+    '''Provide data to front-end'''
     # Create the API request to Meetup
     key = os.environ.get("MEETUP_API_KEY")
     lat = request.GET['lat'][:10]
@@ -47,11 +50,12 @@ def meetups_data(request):
 
                 # As mentioned before, the meetup api only accepts whole miles. Overshoot and then clean out meetups outside of the radius
                 if haversine(float(meetup_data['lng']), float(meetup_data['lat']), float(lon), float(lat)) > radius:
-                    pass
+                    break # If the event is too far out of range, break out and move to next event
 
                 meetup_data['utc'] = int(meetup['time']/1000)
                 meetup_data['utc_offset'] = int(meetup['utc_offset']/1000)
 
+                # Turn UTC into datetime object for formatting
                 date_datetime = datetime.datetime.utcfromtimestamp(int((meetup['time'] + meetup['utc_offset'])/1000))
                 meetup_data['date'] = date_datetime.strftime('%m/%d, %I:%M %p')
 
@@ -74,15 +78,13 @@ def meetups_data(request):
                         meetup_data['tags']=tags.tag(meetup_data['title'], strip_tags(meetup_data['desc']))
                     meetup_data['desc']="<b>Tags:</b> "+ meetup_data['tags']['cat'] + "<hr>" + meetup_data['desc']
 
-
+                # Assuming nothing broke, the event will be added to the list. 
                 meetups_data.append(meetup_data)
 
         else:
             pass
     
     return JsonResponse(meetups_data, safe=False)
-
-from math import radians, cos, sin, asin, sqrt
 
 # https://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points
 def haversine(lon1, lat1, lon2, lat2):
