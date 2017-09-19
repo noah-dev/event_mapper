@@ -50,7 +50,8 @@ def meetups_data(request):
 
                 # As mentioned before, the meetup api only accepts whole miles. Overshoot and then clean out meetups outside of the radius
                 if haversine(float(meetup_data['lng']), float(meetup_data['lat']), float(lon), float(lat)) > radius:
-                    break # If the event is too far out of range, break out and move to next event
+                    # break # If the event is too far out of range, break out and move to next event
+                    pass # Strange issue; will need to look into
 
                 meetup_data['utc'] = int(meetup['time']/1000)
                 meetup_data['utc_offset'] = int(meetup['utc_offset']/1000)
