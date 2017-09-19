@@ -17,8 +17,11 @@ def meetups_data(request):
     key = os.environ.get("MEETUP_API_KEY")
     lat = request.GET['lat'][:10]
     lon = request.GET['lon'][:10]
-    meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=5.0" + "&lon=" + lon + "&lat=" + lat
-    # print(meetup_api_request)
+    radius = str(int(float(request.GET['radius'])*0.000621371192)+1)
+    tag_flag = request.GET['tag_flag']
+    
+    meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius="+ radius + "&lon=" + lon + "&lat=" + lat
+    print(meetup_api_request)
     meetups = json.loads(requests.get(meetup_api_request).text)
     
     meetups_data = []
@@ -57,12 +60,11 @@ def meetups_data(request):
                     meetup_data['desc']+= "<h1>No Description Found</h1>"
                 
                 # Assign appropriate tags to the meetup
-                if meetup_data['desc']== "<h1>No Description Found</h1>":
-                    pass
-                    meetup_data['tags']=tags.tag(meetup_data['title'], "")
-                else:
-                    pass
-                    meetup_data['tags']=tags.tag(meetup_data['title'], strip_tags(meetup_data['desc']))
+                if tag_flag == "true":
+                    if meetup_data['desc']== "<h1>No Description Found</h1>":
+                        meetup_data['tags']=tags.tag(meetup_data['title'], "")
+                    else:
+                        meetup_data['tags']=tags.tag(meetup_data['title'], strip_tags(meetup_data['desc']))
 
                 meetups_data.append(meetup_data)
 

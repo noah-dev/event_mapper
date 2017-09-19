@@ -49,10 +49,20 @@ app.controller('maplist', function($scope, $http) {
             fillOpacity: 0.35,
             map: map,
             center: map.getCenter(),
-            radius: 8046.72
+            radius: 8046.72, //About 5 miles
+            editable: true,
+            draggable: true       
         });
-        map.addListener('center_changed', function() {
-            l_area.setCenter(l_map.getCenter())
+
+        var maxRadius = 17000; // whatever max size you want to dictate
+        var minRadius = 2000; // whatever max size you want to dictate
+        google.maps.event.addListener(l_area,'radius_changed',_=>{
+            if (l_area.getRadius() > maxRadius) {
+                l_area.setRadius(maxRadius);
+            }
+            if (l_area.getRadius() < minRadius) {
+                l_area.setRadius(minRadius);
+            }
         });
     }
     function populate(){
@@ -60,8 +70,9 @@ app.controller('maplist', function($scope, $http) {
             url: DATA_URL,
             method: "GET",
             params: {
-                'lat': l_map.getCenter().lat(),
-                'lon': l_map.getCenter().lng(),
+                'lat': l_area.getCenter().lat(),
+                'lon': l_area.getCenter().lng(),
+                'radius': l_area.getRadius(),
                 'to_time': to_unix,
                 'from_time': from_unix
             }
