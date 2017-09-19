@@ -23,11 +23,14 @@ def meetups_data(request):
     lat = request.GET['lat'][:10]
     lon = request.GET['lon'][:10]
     radius = float(request.GET['radius'])*0.000621371192
+    print(radius)
     meetup_api_radius = str(int(radius)+1) 
+    print(meetup_api_radius)
     tag_flag = request.GET['tag_flag']
     
     # The meetup api seems to only accept whole miles. Overshoot and then clean out meetups outside of the radius
     meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius="+ meetup_api_radius + "&lon=" + lon + "&lat=" + lat
+    print(meetup_api_request)
     meetups = json.loads(requests.get(meetup_api_request).text)
     
     meetups_data = []
@@ -50,8 +53,8 @@ def meetups_data(request):
 
                 # As mentioned before, the meetup api only accepts whole miles. Overshoot and then clean out meetups outside of the radius
                 if haversine(float(meetup_data['lng']), float(meetup_data['lat']), float(lon), float(lat)) > radius:
-                    # break # If the event is too far out of range, break out and move to next event
-                    pass # Strange issue; will need to look into
+                    print("Break: ", haversine(float(meetup_data['lng']), float(meetup_data['lat']), float(lon), float(lat)), meetup_data['lng'], meetup_data['lat'])
+                    continue # If the event is too far out of range, break out and move to next event
 
                 meetup_data['utc'] = int(meetup['time']/1000)
                 meetup_data['utc_offset'] = int(meetup['utc_offset']/1000)
@@ -101,8 +104,8 @@ def haversine(lon1, lat1, lon2, lat2):
     dlat = lat2 - lat1 
     a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
     c = 2 * asin(sqrt(a)) 
-    r = 6371 # Radius of earth in kilometers. Use 3956 for miles
-    return c * r
+    r = 3956 # Radius of earth in kilometers. Use 3956 for miles
+    return c * r 
 
 # -------------------------------------
 # Previous Versions
