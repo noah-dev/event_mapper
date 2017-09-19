@@ -15,9 +15,9 @@ def privacy(request):
 def meetups_data(request):
     # Create the API request to Meetup
     key = os.environ.get("MEETUP_API_KEY")
-    lat = request.GET['lat']
-    lon = request.GET['lon']
-    meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=5.0&" + "lon=" + lon + "&lat=" + lat
+    lat = request.GET['lat'][:10]
+    lon = request.GET['lon'][:10]
+    meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius=10.0" + "&lon=" + lon + "&lat=" + lat
     print(meetup_api_request)
     meetups = json.loads(requests.get(meetup_api_request).text)
     

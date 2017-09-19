@@ -1,7 +1,7 @@
 const DATA_URL = "meetups_data/";
-app = angular.module('map', ["ngSanitize",'g1b.datetime-range'])
+app = angular.module('main', ["ngSanitize",'g1b.datetime-range'])
 
-app.controller('list', function($scope, $http) {
+app.controller('maplist', function($scope, $http) {
 
     // Setup the angular-datetime-range element
     $scope.start = moment();
@@ -15,76 +15,69 @@ app.controller('list', function($scope, $http) {
     };
     $scope.changedEnd = function () {
         from_unix = moment($scope.end['_d']).unix();
-    };
+    };  
 
-    //Local variable 
-    var local_map;
-    var local_markers = [];
-    var local_infowindow;
+    var l_map;
+    var l_markers = [];
+    var l_infowindow;
+    var l_events = [];
+
     initMap();
-
-    $scope.populate = function(){
-        populate_map_and_list(local_markers, local_infowindow, local_map, to_unix, from_unix)
-    }
-    
-    /*
     $scope.$watch('visible_events', function() {
-        if (typeof local_map != 'undefined'){
-            show_filtered_meetups(local_markers, local_map);
-        };
+        showFiltered(l_map, l_markers, $scope.visible_events);
     });
-    */
-    
-
+    $scope.populate = function(){
+        populate();
+    }
 
     function initMap(){
-        map = new google.maps.Map(document.getElementById('map'), {
+        l_map = new google.maps.Map(document.getElementById('map'), {
             zoom: 11,
-            center: {lat: 39.1, lng: -94.6},
+            center: {lat: 39.1, lng: -94.5},
         });
-        infowindow = new google.maps.InfoWindow({})
-
-        local_map = map;
-        local_infowindow = infowindow;
-
-        populate_map_and_list(local_markers, infowindow, map, to_unix, from_unix)
+        l_infowindow = new google.maps.InfoWindow({});
+        populate();
     }
-
-    function reset_map(markers){
-        while (markers.length != 0){ 
-            var marker = markers.pop();
-            marker['marker'].setMap(null);
-            
-        }
-    }
-
-    function populate_map_and_list(markers, infowindow, map, to, from){
+    function populate(){
         data_req = $http({
             url: DATA_URL,
             method: "GET",
             params: {
-                'lat': map.getCenter().lat(),
-                'lon': map.getCenter().lng(),
-                'to_time': to,
-                'from_time': from
+                'lat': l_map.getCenter().lat(),
+                'lon': l_map.getCenter().lng(),
+                'to_time': to_unix,
+                'from_time': from_unix
             }
+        }).then(res=>{
+            l_events = res.data;
+            $scope.events = l_events;
+            resetMarkers(l_markers);
+            plotMarkers(l_events, l_map, l_markers, l_infowindow);
+            showFiltered(l_map, l_markers, $scope.visible_events);
         });
-        data_req.then(data=>{
-            var events = data.data;
-            $scope.events = events;
-            reset_map(markers);
-            return events
-        }).then(events=>{
-            for (var i = 0; i < events.length; i++) {
-                event = events[i]
-                add_marker(markers, infowindow, map, event['index'], event['title'], event['desc'], event['lat'], event['lng'])
-            }
-        }).then(markers=>{
-            show_filtered_meetups(markers, map);
-        })
     }
 
-    function add_marker(markers, infowindow, map, index, title, desc, lat, lng){
+    
+    function resetMarkers(markers){
+        while (markers.length != 0){ 
+            var marker = markers.pop();
+            marker['marker'].setMap(null);
+        }
+    }
+    function clearMarkers(markers){
+        for (var i = 0; i < markers.length; i++) {
+            markers[i]['marker'].setMap(null);
+        }
+    }
+
+    function plotMarkers(events,map, markers, infowindow){
+        for (var i = 0; i < events.length; i++) {
+            event = events[i]
+            addMarker(map, markers, infowindow, event['index'], event['title'], event['desc'], event['lat'], event['lng'])
+        }
+    }
+
+    function addMarker(map, markers, infowindow, index, title, desc, lat, lng){
         var marker = new google.maps.Marker({
             position: {lat: lat, lng: lng},
             title: title
@@ -97,23 +90,15 @@ app.controller('list', function($scope, $http) {
         });
         markers.push({'index':index, 'marker':marker})
     };
-
-    //Updating the list
-    /*
-    $scope.$watch('visible_meetups', function() {
-        show_filtered_meetups();
-    });
-    */
-    function show_filtered_meetups(markers, map){
-        console.log(markers)
+    function showFiltered(map, markers, filtered_events){
+        clearMarkers(markers)
         if (markers.length != 0){
-            if( $scope.visible_events ) {
-                for (var i = 0; i < $scope.visible_events.length; i++) {
-                    markers[$scope.visible_events[i]['index']]['marker'].setMap(map);
+            if( filtered_events ) {
+                for (var i = 0; i < filtered_events.length; i++) {
+                    markers[filtered_events[i]['index']]['marker'].setMap(map);
                 }
             }
         }
     }
-
 });
 
