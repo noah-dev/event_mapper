@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.utils.html import strip_tags
 import os, requests, json, datetime
 
+from math import radians, cos, sin, asin, sqrt
+
 from . import tags
 
 def index(request):
@@ -18,10 +20,11 @@ def meetups_data(request):
     lat = request.GET['lat'][:10]
     lon = request.GET['lon'][:10]
     radius = float(request.GET['radius'])*0.000621371192
+    meetup_api_radius = str(int(radius)+1) 
     tag_flag = request.GET['tag_flag']
     
-    meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius="+ int(radius)+1 + "&lon=" + lon + "&lat=" + lat
-    print(meetup_api_request)
+    # The meetup api seems to only accept whole miles. Overshoot and then clean out meetups outside of the radius
+    meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius="+ meetup_api_radius + "&lon=" + lon + "&lat=" + lat
     meetups = json.loads(requests.get(meetup_api_request).text)
     
     meetups_data = []
@@ -41,6 +44,10 @@ def meetups_data(request):
                 meetup_data['address'] = meetup['venue']['address_1']
                 meetup_data['lat'] = meetup['venue']['lat']
                 meetup_data['lng'] = meetup['venue']['lon']
+
+                # As mentioned before, the meetup api only accepts whole miles. Overshoot and then clean out meetups outside of the radius
+                if haversine(float(meetup_data['lng']), float(meetup_data['lat']), float(lon), float(lat)) > radius:
+                    pass
 
                 meetup_data['utc'] = int(meetup['time']/1000)
                 meetup_data['utc_offset'] = int(meetup['utc_offset']/1000)
@@ -75,6 +82,24 @@ def meetups_data(request):
     
     return JsonResponse(meetups_data, safe=False)
 
+from math import radians, cos, sin, asin, sqrt
+
+# https://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points
+def haversine(lon1, lat1, lon2, lat2):
+    """
+    Calculate the great circle distance between two points 
+    on the earth (specified in decimal degrees)
+    """
+    # convert decimal degrees to radians 
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+
+    # haversine formula 
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a)) 
+    r = 6371 # Radius of earth in kilometers. Use 3956 for miles
+    return c * r
 
 # -------------------------------------
 # Previous Versions

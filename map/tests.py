@@ -23,7 +23,13 @@ class TestData(TestCase):
         from_time_dt = timezone.now().replace(tzinfo=None) + datetime.timedelta(days=1)
         from_time = int(time.mktime(from_time_dt.timetuple()))
 
-        response = self.client.get(reverse('map:meetups_data'),{'to_time': to_time , 'from_time': from_time })
+        response = self.client.get(reverse('map:meetups_data'),{'lat': 39.099727, 
+                                                                'lon': -94.578567,
+                                                                'radius': 8046.72,
+                                                                'to_time': to_time , 
+                                                                'from_time': from_time,
+                                                                'tag_flag': "true",
+                                                                })
         data_json = json.loads(response.content)
         data_keys = ['index', 'title', 'link', 'address', 'lat', 'lng', 'utc', 'utc_offset', 'date', 'group', 'desc', 'tags']
         

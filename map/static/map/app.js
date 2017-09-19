@@ -23,22 +23,36 @@ app.controller('maplist', function($scope, $http) {
     var l_events = [];
     var l_area = null;
 
-    initMap();
     $scope.$watch('visible_events', function() {
         showFiltered(l_map, l_markers, $scope.visible_events);
     });
     $scope.populate = function(){
         populate();
     }
+    initMap();
 
     function initMap(){
+        if (map_center === undefined){
+            map_center = {lat: 39.099727, lng: -94.578567};
+        }
+
         l_map = new google.maps.Map(document.getElementById('map'), {
             zoom: 11,
-            center: {lat: 39.1, lng: -94.5},
+            center: map_center
         });
         l_infowindow = new google.maps.InfoWindow({});
         drawArea(l_map)
         populate();
+
+        if (navigator.geolocation) {
+            var map_center;
+            navigator.geolocation.getCurrentPosition(function(position){
+                map_center = {lat: Number(position.coords.latitude), lng: Number(position.coords.longitude)};
+                l_map.setCenter(map_center);
+                l_area.setCenter(map_center);
+                populate();
+            });
+        }
     }
     function drawArea(map){
         l_area = new google.maps.Circle({
