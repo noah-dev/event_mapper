@@ -1,6 +1,5 @@
 # event_mapper
-This app was built over the course of three major sprints, total to around ~18 hours. (Estimate subject to change)
-
+![](https://github.com/noah-dev/event_mapper/blob/master/docs/demo.gif)
 Originally planned for a 2 week build time, but opportunity arose that required immediate execution. The app is functional and working. Moving forward, refactoring and dealing with technical debt will be important. 
 
 **Todo:**
@@ -20,3 +19,8 @@ Originally planned for a 2 week build time, but opportunity arose that required 
 * Switched from jQuery AJAX code to Angular AJAX ($HTTP) code. 
 * Created marker remove function to replace code in two different places. 
 * Renamed variables to be more consistent with website name
+## 9/19/17
+* Further refactored Angular JS code
+* Search area can now be set by user. Using editable google map shape for UI
+* Back-end code created to support afromentioned search area feature. Notably the meetup api seems to only accept whole miles. So extra code was added to check distance and filter out. Still needs refinment. 
+* Implemented a categorizer using IBM's Natural Language Understanding API. Functional, but needs optimization work. 
