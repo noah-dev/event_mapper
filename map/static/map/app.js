@@ -54,8 +54,8 @@ app.controller('maplist', function($scope, $http) {
             draggable: true       
         });
 
-        var maxRadius = 17000; // whatever max size you want to dictate
-        var minRadius = 2000; // whatever max size you want to dictate
+        var maxRadius = 16093.44; // whatever max size you want to dictate
+        var minRadius = 1609.34; // whatever max size you want to dictate
         google.maps.event.addListener(l_area,'radius_changed',_=>{
             if (l_area.getRadius() > maxRadius) {
                 l_area.setRadius(maxRadius);
@@ -63,9 +63,15 @@ app.controller('maplist', function($scope, $http) {
             if (l_area.getRadius() < minRadius) {
                 l_area.setRadius(minRadius);
             }
+
         });
+
+
     }
     function populate(){
+        if($scope.tag_flag === undefined){
+            $scope.tag_flag = false
+        }
         data_req = $http({
             url: DATA_URL,
             method: "GET",
@@ -74,7 +80,8 @@ app.controller('maplist', function($scope, $http) {
                 'lon': l_area.getCenter().lng(),
                 'radius': l_area.getRadius(),
                 'to_time': to_unix,
-                'from_time': from_unix
+                'from_time': from_unix,
+                'tag_flag': $scope.tag_flag
             }
         }).then(res=>{
             l_events = res.data;
