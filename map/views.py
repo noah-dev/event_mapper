@@ -2,11 +2,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.utils import timezone
 from django.utils.html import strip_tags
-import os, requests, json, datetime
+import os, requests, json, datetime, hashlib
 
 from math import radians, cos, sin, asin, sqrt
 
+# Confusing names? May rename
 from . import tags
+from .models import tag_store
 
 def index(request):
     '''Render the home page, with the map'''
@@ -73,10 +75,14 @@ def meetups_data(request):
                 
                 # Assign appropriate tags to the meetup
                 if tag_flag == "true":
+                    #text  = title + "\n" + desc_nohtml
+                    set_tags(text)
                     if meetup_data['desc']== "<h1>No Description Found</h1>":
-                        meetup_data['tags']=tags.tag(meetup_data['title'], "")
+                        text = meetup_data['title'];
                     else:
-                        meetup_data['tags']=tags.tag(meetup_data['title'], strip_tags(meetup_data['desc']))
+                        text = meetup_data['title'] + "/n" + meetup_data['desc']
+                    
+                    meetup_data['tags'] = set_tags(text)
                     meetup_data['desc']="<b>Tags:</b> "+ meetup_data['tags']['cat'] + "<hr>" + meetup_data['desc']
 
                 # Assuming nothing broke, the event will be added to the list. 
@@ -86,6 +92,13 @@ def meetups_data(request):
             pass
     
     return JsonResponse(meetups_data, safe=False)
+
+def set_tags(text):
+    # Encode string as bytes, sha1 it, and then spit out string
+    key = hashlib.sha1(str.encode(text)).hexdigest()
+    todo_items = get_object_or_404(tag_store, key=key)
+
+    return "placeholder"
 
 # https://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points
 def haversine(lon1, lat1, lon2, lat2):

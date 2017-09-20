@@ -1,4 +1,4 @@
-import os, json
+import os, json, hashlib
 import watson_developer_cloud as wdp
 import watson_developer_cloud.natural_language_understanding.features.v1 as Features
 
@@ -8,9 +8,9 @@ natural_language_understanding = wdp.NaturalLanguageUnderstandingV1(
   password=os.environ.get('w_nlu_password'),
   version="2017-02-27")
 
-def tag(title, desc_nohtml):
+def tag(text):
   tags = {}
-  tags['cat']=cat(title + "\n" + desc_nohtml)
+  tags['cat']=cat(text)
   return tags;
 
 # Return NLU category tag
