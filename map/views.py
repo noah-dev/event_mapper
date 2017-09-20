@@ -23,14 +23,11 @@ def meetups_data(request):
     lat = request.GET['lat'][:10]
     lon = request.GET['lon'][:10]
     radius = float(request.GET['radius'])*0.000621371192
-    print(radius)
     meetup_api_radius = str(int(radius)+1) 
-    print(meetup_api_radius)
     tag_flag = request.GET['tag_flag']
     
     # The meetup api seems to only accept whole miles. Overshoot and then clean out meetups outside of the radius
     meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius="+ meetup_api_radius + "&lon=" + lon + "&lat=" + lat
-    print(meetup_api_request)
     meetups = json.loads(requests.get(meetup_api_request).text)
     
     meetups_data = []
