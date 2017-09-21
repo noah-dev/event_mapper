@@ -76,7 +76,6 @@ def meetups_data(request):
                 # Assign appropriate tags to the meetup
                 if tag_flag == "true":
                     #text  = title + "\n" + desc_nohtml
-                    set_tags(text)
                     if meetup_data['desc']== "<h1>No Description Found</h1>":
                         text = meetup_data['title'];
                     else:
@@ -96,8 +95,9 @@ def meetups_data(request):
 def set_tags(text):
     # Encode string as bytes, sha1 it, and then spit out string
     key = hashlib.sha1(str.encode(text)).hexdigest()
-    todo_items = get_object_or_404(tag_store, key=key)
-
+    tag = get_object_or_404(tag_store, key=key)
+    if todo_items:
+        tag = tag
     return "placeholder"
 
 # https://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points

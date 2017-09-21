@@ -19,4 +19,5 @@ from . import views
 urlpatterns = [
     url(r'^$', views.home),
     url(r'^map/', include('map.urls')),
+    url(r'^admin/', admin.site.urls),
 ]
