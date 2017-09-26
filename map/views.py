@@ -95,10 +95,15 @@ def meetups_data(request):
 def set_tags(text):
     # Encode string as bytes, sha1 it, and then spit out string
     key = hashlib.sha1(str.encode(text)).hexdigest()
-    tag = get_object_or_404(tag_store, key=key)
-    if todo_items:
-        tag = tag
-    return "placeholder"
+    event_tags = {}
+    try:
+        db_tags = get_object_or_404(tag_store, key=key)
+        event_tags['cat'] = db_tags.cat
+    except:
+        event_tags = tags.tag(text)
+        temp = tag_store(key=key,cat=event_tags['cat'])
+        temp.save()
+    return event_tags
 
 # https://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points
 def haversine(lon1, lat1, lon2, lat2):
