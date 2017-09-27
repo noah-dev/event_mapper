@@ -7,6 +7,9 @@ natural_language_understanding = wdp.NaturalLanguageUnderstandingV1(
   password=os.environ.get('w_nlu_password'),
   version="2017-02-27")
 
+response = natural_language_understanding.list_models()
+print(json.dumps(response, indent=2))
+
 response = natural_language_understanding.analyze(
   text="IBM is an American multinational technology company headquartered \
     in Armonk, New York, United States, with operations in over 170 \

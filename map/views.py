@@ -2,11 +2,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.utils import timezone
 from django.utils.html import strip_tags
-import os, requests, json, datetime
+import os, requests, json, datetime, hashlib
 
 from math import radians, cos, sin, asin, sqrt
 
+# Confusing names? May rename
 from . import tags
+from .models import tag_store
 
 def index(request):
     '''Render the home page, with the map'''
@@ -23,14 +25,11 @@ def meetups_data(request):
     lat = request.GET['lat'][:10]
     lon = request.GET['lon'][:10]
     radius = float(request.GET['radius'])*0.000621371192
-    print(radius)
     meetup_api_radius = str(int(radius)+1) 
-    print(meetup_api_radius)
     tag_flag = request.GET['tag_flag']
     
     # The meetup api seems to only accept whole miles. Overshoot and then clean out meetups outside of the radius
     meetup_api_request = "https://api.meetup.com/find/events?key=" + key +"&photo-host=public&sig_id=229046722&radius="+ meetup_api_radius + "&lon=" + lon + "&lat=" + lat
-    print(meetup_api_request)
     meetups = json.loads(requests.get(meetup_api_request).text)
     
     meetups_data = []
@@ -76,10 +75,13 @@ def meetups_data(request):
                 
                 # Assign appropriate tags to the meetup
                 if tag_flag == "true":
+                    #text  = title + "\n" + desc_nohtml
                     if meetup_data['desc']== "<h1>No Description Found</h1>":
-                        meetup_data['tags']=tags.tag(meetup_data['title'], "")
+                        text = meetup_data['title'];
                     else:
-                        meetup_data['tags']=tags.tag(meetup_data['title'], strip_tags(meetup_data['desc']))
+                        text = meetup_data['title'] + "/n" + meetup_data['desc']
+                    
+                    meetup_data['tags'] = set_tags(text)
                     meetup_data['desc']="<b>Tags:</b> "+ meetup_data['tags']['cat'] + "<hr>" + meetup_data['desc']
 
                 # Assuming nothing broke, the event will be added to the list. 
@@ -89,6 +91,19 @@ def meetups_data(request):
             pass
     
     return JsonResponse(meetups_data, safe=False)
+
+def set_tags(text):
+    # Encode string as bytes, sha1 it, and then spit out string
+    key = hashlib.sha1(str.encode(text)).hexdigest()
+    event_tags = {}
+    try:
+        db_tags = get_object_or_404(tag_store, key=key)
+        event_tags['cat'] = db_tags.cat
+    except:
+        event_tags = tags.tag(text)
+        temp = tag_store(key=key,cat=event_tags['cat'])
+        temp.save()
+    return event_tags
 
 # https://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points
 def haversine(lon1, lat1, lon2, lat2):
