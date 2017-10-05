@@ -2,7 +2,6 @@ const DATA_URL = "meetups_data/";
 app = angular.module('main', ["ngSanitize",'g1b.datetime-range'])
 
 app.controller('maplist', function($scope, $http) {
-
     // Setup the angular-datetime-range element
     $scope.start = moment();
     $scope.end = moment().add(1, 'days').add(0, 'hours');
@@ -34,6 +33,7 @@ app.controller('maplist', function($scope, $http) {
     }
 
     // On load, create the map and render it
+    $scope.loading = false;
     initMap();
 
     function initMap(){
@@ -96,6 +96,7 @@ app.controller('maplist', function($scope, $http) {
 
     // Retrive data from back-end
     function populate(){
+        $scope.loading = true
         if($scope.tag_flag === undefined){
             $scope.tag_flag = false
         }
@@ -116,6 +117,7 @@ app.controller('maplist', function($scope, $http) {
             resetMarkers(l_markers);
             plotMarkers(l_events, l_map, l_markers, l_infowindow);
             showFiltered(l_map, l_markers, $scope.visible_events);
+            $scope.loading = false;
         });
     }
 

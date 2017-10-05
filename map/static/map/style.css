@@ -6,3 +6,41 @@
     padding-top: 10px;
     background-color: #249dd0;
 }
+
+
+/*
+https://www.w3schools.com/howto/howto_css_loader.asp
+https://www.w3schools.com/howto/howto_css_overlay.asp
+https://stackoverflow.com/questions/1040554/how-to-put-a-div-in-center-of-browser-using-css
+*/
+#loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #249dd0; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    margin: auto;
+    position: absolute;
+    top: 0; 
+    left: 0;
+    bottom: 0; 
+    right: 0;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: block; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+}

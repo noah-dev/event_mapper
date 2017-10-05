@@ -1,12 +1,12 @@
 {% extends "map/base.html" %}
 {% block content %}
 
-<body>
+{% verbatim %}
+<body ng-app="main" ng-controller="maplist">
     <div class="jumbotron">
         <div class="row">
             <div class="col-md-5">
-                {% verbatim %}
-                <div ng-app="main" ng-controller="maplist">
+                <div>
                     <div class="col-md-12">   
                         <h3>Per API ToS: Application uses the Meetup API but is not verified by Meetup, Inc. <a href="/map/privacy/" style="color:white">(Click For Privacy Policy)</a></h3>
                         <hr>
@@ -50,8 +50,6 @@
                             </div>
                         </div>
                     </div>
-                {% endverbatim %}
-
                 </div>
             </div>
 
@@ -60,6 +58,11 @@
             </div>
         </div>
     </div>
+    <div id="overlay" ng-show="loading">
+        <div id="loader"></div>     
+    </div> 
 </body>
+{% endverbatim %}
+
 {% endblock %}
 
