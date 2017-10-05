@@ -114,10 +114,10 @@ app.controller('maplist', function($scope, $http) {
         }).then(res=>{
             l_events = res.data;
             $scope.events = l_events;
+            $scope.loading = false;
             resetMarkers(l_markers);
             plotMarkers(l_events, l_map, l_markers, l_infowindow);
             showFiltered(l_map, l_markers, $scope.visible_events);
-            $scope.loading = false;
         });
     }
 
