@@ -24,3 +24,6 @@ Originally planned for a 2 week build time, but opportunity arose that required 
 * Search area can now be set by user. Using editable google map shape for UI
 * Back-end code created to support afromentioned search area feature. Notably the meetup api seems to only accept whole miles. So extra code was added to check distance and filter out. Still needs refinment. 
 * Implemented a categorizer using IBM's Natural Language Understanding API. Functional, but needs optimization work. 
+
+## 10/05/17
+* Implemented a loading screen to show the app is responding. Improved UX
