@@ -2,13 +2,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.utils import timezone
 from django.utils.html import strip_tags
-import os, requests, json, datetime, hashlib
+import os, requests, json, datetime, hashlib, time
 
 from math import radians, cos, sin, asin, sqrt
 
-# Confusing names? May rename
 from . import tags
-from .models import tag_store
+from .models import tag_store, stat_store
 
 def index(request):
     '''Render the home page, with the map'''
@@ -52,7 +51,7 @@ def meetups_data(request):
 
                 # As mentioned before, the meetup api only accepts whole miles. Overshoot and then clean out meetups outside of the radius
                 if haversine(float(meetup_data['lng']), float(meetup_data['lat']), float(lon), float(lat)) > radius:
-                    print("Break: ", haversine(float(meetup_data['lng']), float(meetup_data['lat']), float(lon), float(lat)), meetup_data['lng'], meetup_data['lat'])
+                    # print("Break: ", haversine(float(meetup_data['lng']), float(meetup_data['lat']), float(lon), float(lat)), meetup_data['lng'], meetup_data['lat'])
                     continue # If the event is too far out of range, break out and move to next event
 
                 meetup_data['utc'] = int(meetup['time']/1000)
@@ -93,16 +92,48 @@ def meetups_data(request):
     return JsonResponse(meetups_data, safe=False)
 
 def set_tags(text):
-    # Encode string as bytes, sha1 it, and then spit out string
+    '''
+    Using topic modeling with IBM Natural Language Understanding, assign
+    tags to an event. (e.g. A programming event is tagged as technology)
+    '''
+    # See if the event's description has changed with a SHA1.
+    # Used to save time & performance by preventing unnecessary recomputation. 
     key = hashlib.sha1(str.encode(text)).hexdigest()
     event_tags = {}
+    # If the SHA1 exists within the DB, then we can reasonably assume the 
+    # event's details have not changed. (Collisions are technically a thing now)
+
+    # Do not hit the Watson API - instead rely on an earlier saved result.
     try:
+        start = time.time()
+
         db_tags = get_object_or_404(tag_store, key=key)
         event_tags['cat'] = db_tags.cat
+
+        # Save stats in database
+        end = time.time()
+        new_stat = stat_store(stat_type="tags_db", stats=str(end - start))
+        new_stat.save()
+    
+    # If it cannot be found, either because the event was never tagged or
+    # because the event's details have changed, then hit the Watson API
+    # to analyze the meetup and assign tags.
     except:
+        start = time.time()
+
         event_tags = tags.tag(text)
-        temp = tag_store(key=key,cat=event_tags['cat'])
-        temp.save()
+
+        # After getting the tags, save them to a database using the SHA1 as
+        # the key. If this same meetup is requested, the tags in the DB
+        # can be re-used to reduce delay. 
+        new_tags = tag_store(key=key,cat=event_tags['cat'])
+        new_tags.save()
+
+        # Save stats in database
+        end = time.time()
+        new_stat = stat_store(stat_type="tags", stats=str(end - start))
+        new_stat.save()
+
     return event_tags
 
 # https://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points
@@ -121,6 +152,7 @@ def haversine(lon1, lat1, lon2, lat2):
     c = 2 * asin(sqrt(a)) 
     r = 3956 # Radius of earth in kilometers. Use 3956 for miles
     return c * r 
+
 
 # -------------------------------------
 # Previous Versions

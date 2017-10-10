@@ -1,4 +1,4 @@
-import os, json, hashlib
+import os, json, hashlib, time
 import watson_developer_cloud as wdp
 import watson_developer_cloud.natural_language_understanding.features.v1 as Features
 
@@ -11,7 +11,7 @@ natural_language_understanding = wdp.NaturalLanguageUnderstandingV1(
 def tag(text):
   tags = {}
   tags['cat']=cat(text)
-  return tags;
+  return tags
 
 # Return NLU category tag
 def cat(text):
